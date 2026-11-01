@@ -1,0 +1,33 @@
+[project]
+name = "playground"
+version = "0.1.0"
+description = "画像から画像への変換と潜在表現の変化を可視化するStable Diffusion実験用ツール"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "accelerate>=1.15.0",
+    "diffusers>=0.42.0",
+    "matplotlib>=3.11.2",
+    "pillow>=13.0.0",
+    "pydantic",
+    "pyyaml",
+    "torch>=2.14.1",
+    "transformers>=5.20.2",
+]
+
+[project.scripts]
+i2i = "i2i:main"
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14.0"]
+build-backend = "uv_build"
+
+[[tool.uv.index]]
+name = "torch"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "torch" }
+torchvision = { index = "torch" }
+torchaudio = { index = "torch" }

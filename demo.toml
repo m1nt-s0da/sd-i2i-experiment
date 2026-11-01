@@ -1,0 +1,43 @@
+[i2i]
+prompt = "a cinematic shot of a modern city street at sunny daytime, wet asphalt with glowing puddles, reflection of bright sky, distant skyscrapers, passing cars with motion blur, sunny afternoon daylight, volumetric sunlight, 8k resolution, highly detailed"
+negative_prompt = "(worst quality, low quality:1.4), night, dark, midnight, cloudy, rainy, street lamps on, deformed, blurry, bad anatomy, logo, watermark, signature, text, monochrome, illustration, anime, 3d render, neon lights, glowing windows"
+
+guidance_scale = 8.0
+steps = 30
+start_step = 0
+seed = 42
+latent_pixel_count = 8
+output_path = "output/i2i.png"
+
+[i2i.step_map]
+probe_steps = 5
+threshold = 0.7
+heatmap_path = "output/i2i-heatmap.png"
+
+[i2i.input]
+# type = "generate"
+# prompt = "(masterpiece, best quality, photo-realistic:1.3), a cinematic shot of a modern city street at night, wet asphalt with glowing puddles, reflection of city lights, street lamps, distant skyscrapers, passing cars with light trails, long exposure effect, volumetric lighting, 8k resolution, highly detailed"
+# negative_prompt = "(worst quality, low quality:1.4), daylight, sunny, bright, deformed, blurry, bad anatomy, logo, watermark, signature, text, monochrome, illustration, anime, 3d render"
+# guidance_scale = 8.0
+# steps = 30
+# width = 768
+# height = 432
+# # seed = 42
+# save_path = "output/input.png"
+type = "image"
+path = "output/input.png"
+
+[i2i.pipeline]
+architecture = "sd15"
+model = "stable-diffusion-v1-5/stable-diffusion-v1-5"
+dtype = "float16"
+device = "cuda"
+sampler = "euler"
+enable_attention_slicing = true
+
+[i2i.pipeline.vae]
+enable_slicing = true
+
+[[i2i.controlnet]]
+type = "depth"
+save_image = "output/depth.png"
