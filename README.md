@@ -24,7 +24,7 @@ uv run i2i --config demo_anime.toml
 - 入力には既存画像、またはテキストから生成した画像を指定できます。
 - `start_step`はデノイズ開始位置を表す0始まりのインデックスです。0より大きい場合、入力画像をVAEで潜在表現に変換してから、その位置のノイズを加えます。値が大きいほど入力画像を保ちやすくなります。
 - `start_step = 0`かつ`[i2i.step_map]`なしの場合は純粋なガウスノイズから生成するため、入力画像は使われず、text-to-imageと同じ初期状態になります。
-- `[i2i.step_map]`を指定すると、潜在画像の位置ごとにi2iのデノイズステップ数を変えます。試走中の予測x0の変化量からステップ数を決め、ヒートマップを保存できます。この機能で使えるサンプラーは`euler`と`ddim`です。
+- `[i2i.step_map]`を指定すると、潜在画像の位置ごとにi2iのデノイズステップ数を変えます。試走中の予測x0の変化量からステップ数を決め、ヒートマップを保存できます。試走は、入力画像に(`steps` − `probe_steps`)時点のノイズを加えた潜在から最後のステップまで行います。この機能で使えるサンプラーは`euler`と`ddim`です。
 - `[[i2i.controlnet]]`でControlNetによる条件付けを追加できます。現在は深度（`type = "depth"`）に対応し、深度画像を指定しない場合は入力画像から推定します。
 
 ## 設定
@@ -55,10 +55,12 @@ probe_steps = 5
 refine_steps = 1
 threshold = 1.0
 pool_kernel = 3
+probe_mode = "trajectory"
+metric = "step_delta"
 heatmap_path = "output/step-map.png"
 ```
 
-試走するステップ数（`probe_steps`）、各ピクセルに割り当てる最小ステップ数（`refine_steps`）、変化判定のしきい値（`threshold`）、変化量を平滑化するカーネルサイズ（`pool_kernel`）を設定できます。ヒートマップが不要な場合は`heatmap_path`を省略します。
+試走するステップ数（`probe_steps`。最後のステップから数えます）、各ピクセルに割り当てる最小ステップ数（`refine_steps`）、変化判定のしきい値（`threshold`）、変化量を平滑化するカーネルサイズ（`pool_kernel`）、試走の方式（`probe_mode`。`trajectory`は試走の軌跡を辿り、`renoise`は各ステップで入力にノイズを加え直してx0を推定）、変化量の指標（`metric`。`step_delta`は連続するステップ間のx0差、`input_distance`は入力潜在とx0の差）を設定できます。ヒートマップが不要な場合は`heatmap_path`を省略します。
 
 ### 深度ControlNet
 

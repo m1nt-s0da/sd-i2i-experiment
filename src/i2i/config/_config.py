@@ -127,12 +127,16 @@ class ConfigI2IVAE:
 
 @dataclass
 class ConfigI2IStepMap:
-    # probe_stepsステップ試走し、x0の変化量が空間平均のthreshold倍を超えた回数に応じて
+    # 最後のprobe_stepsステップを試走し、x0の変化量が空間平均のthreshold倍を超えた回数に応じて
     # pixelごとのi2iステップ数（refine_steps〜残りステップ数）を決める。
     probe_steps: int = 4
     refine_steps: int = 1
     threshold: float = 1.0
     pool_kernel: int = 3
+    # step_delta: 連続するステップ間のx0差 / input_distance: 入力潜在と試走x0の差（入力から大きく離れるpixelを深くする）
+    # trajectory: 試走の軌跡を辿る / renoise: 各ステップで入力に同じノイズを加え直してx0を推定する
+    probe_mode: Literal["trajectory", "renoise"] = "trajectory"
+    metric: Literal["step_delta", "input_distance"] = "step_delta"
     heatmap_path: str | None = None
 
 

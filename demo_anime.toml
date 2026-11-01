@@ -2,7 +2,7 @@
 prompt = "masterwork, best quality, anime artwork, anime style, key visual, 1boy, solo, handsome school boy, short black hair, messy bangs, brown eyes, smiling, looking at viewer, school uniform, gakuran, upper body, classroom background, soft lighting, depth of field"
 negative_prompt = "1girl, female, woman, female breasts, long hair, ponytail, twintails, skirt, sailor suit, worst quality, low quality, normal quality, lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, cropped, monochrome, grayscale, photo, realistic, 3d, rendering, text, watermark, signature"
 
-guidance_scale = 8.0
+guidance_scale = 6.0
 steps = 30
 start_step = 0
 seed = 42
@@ -10,9 +10,11 @@ latent_pixel_count = 8
 output_path = "output/i2i_anime.png"
 
 [i2i.step_map]
-probe_steps = 30
+probe_steps = 10
 refine_steps = 5
 threshold = 0.95
+pool_kernel = 3
+probe_mode = "renoise"
 heatmap_path = "output/i2i-anime-heatmap.png"
 
 [i2i.input]

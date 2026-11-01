@@ -10,8 +10,12 @@ latent_pixel_count = 8
 output_path = "output/i2i.png"
 
 [i2i.step_map]
-probe_steps = 5
-threshold = 0.7
+probe_steps = 15
+refine_steps = 5
+threshold = 1
+pool_kernel = 3
+probe_mode = "renoise"
+metric = "input_distance"
 heatmap_path = "output/i2i-heatmap.png"
 
 [i2i.input]

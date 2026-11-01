@@ -131,11 +131,14 @@ def run_image_generation(config: ConfigI2I) -> None:
     input_latent = None
     noise = None
     if config.start_step == 0 and config.step_map is None:
-        latents = torch.randn(
-            latent_shape,
-            generator=generator,
-            device=pipeline.device,
-            dtype=pipeline.vae.dtype,
+        latents = (
+            torch.randn(
+                latent_shape,
+                generator=generator,
+                device=pipeline.device,
+                dtype=pipeline.vae.dtype,
+            )
+            * pipeline.scheduler.init_noise_sigma
         )
     else:
         with torch.no_grad():
@@ -241,7 +244,8 @@ def run_image_generation(config: ConfigI2I) -> None:
     with torch.no_grad():
         if config.step_map is not None:
             step_counts = compute_step_counts(
-                latents,
+                input_latent,
+                noise,
                 scheduler=pipeline.scheduler,
                 start_step=config.start_step,
                 config=config.step_map,
